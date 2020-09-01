@@ -1,0 +1,177 @@
+# Appendix {-}
+
+Table \@ref(tab:TD-tab) shows exact power for the Test of Deficit [TD: @crawford_comparing_1998], for a range of likely parameters. Power for the TD is calculated from the formula:
+
+\begin{equation*}
+power = 1 - \beta = T_{n-1}\left(t_{\alpha, \ n-1} \Bigg\rvert \frac{x^* - \overline{x}}{\sigma \sqrt{\frac{n+1}{n}}}\right)
+\end{equation*}
+
+Where $T_{n-1}(. \rvert \theta)$ is the cumulative distribution function for the
+non-central t-distribution with $n-1$ degrees of freedom and non-centrality
+parameter $TD = \frac{x^* - \overline{x}}{\sigma \sqrt{\frac{n+1}{n}}}$
+is the $\alpha$ quantile of the *central* t-distribution on $n-1$ degrees of
+freedom. See @harrison_sample_2004 for discussion on using the non-central
+t-distribution for power calculations for t-tests.
+
+Note that the Bayesian Test of Deficit [@crawford_comparing_2011] produces
+equivalent results to the TD, and has frequentist properties, so may be
+considered to have the same effective levels of power as the TD. Note also that
+the Unstandardised Difference Test (UDT) [@crawford_testing_2005] is
+identical to applying the TD to between-task discrepancy scores. Power for the
+UDT is thus identical with power the TD, but related to the effect size of a
+between-task discrepancy ($Z_{DCC}$) rather than the effect size of a deficit ($Z_{CC}$).
+
+Table \@ref(tab:RSDT-tab) shows estimated power for the Revised Standardised Difference Test
+[RSDT: @crawford_testing_2005], for a range of likely parameters. Power for
+the RSDT was estimated using Monte Carlo simulation, by generating n+1 random
+draws from a bivariate normal distribution, imposing the desired ZDCC on the
+n+1th draw and comparing that observation to the n others using the RSDT test
+formula. This was repeated 1 000 000 times, and power was found by dividing the
+number of significant tests by the total number of tests run, for each parameter
+combination of interest. The code for our calculations and simulations is
+available at repolink. Power calculations for a wider range of single-case tests
+are supported by the singcar package for R, the developmental version of which can be 
+accessed [here](https://github.com/jorittmo/singcar)^[https://github.com/jorittmo/singcar].
+
+
+\setcounter{table}{0}
+\renewcommand{\thetable}{A\arabic{table}}
+
+\setlength{\parindent}{0in}
+\setlength{\leftskip}{-0.5in}
+\setlength{\parskip}{0pt}
+
+
+
+\newgeometry{margin=1in}
+
+(ref:TD-tab-text) *Note:* $\text{Z}_{\text{CC}} = \frac{x^* - \overline{x}}{s_x}$, i.e. the standardised case score for the task of interest.
+
+(ref:TD-tab-cap) Power for the Test of Deficit [@crawford_comparing_1998].
+
+
+```{r TD-tab, echo=FALSE, message=FALSE}
+
+library(kableExtra)
+
+ana_TD_pwr <- function () {
+  xbar <- 0
+  sigma <- 1
+  ana_TD_pwr_data <- data.frame(deficit = double(), ncon = double(), power = double())
+  for (n in seq(4, 24, by = 2)) {
+    for (alpha in c(0.05, 0.1)) {
+      for (tail in c("Two", "One")) {
+        
+        if (tail == "One") {
+          pd <- data.frame(deficit = seq(-4, -0.5, by = 0.5))%>%
+            mutate(Tail = tail) %>% 
+            mutate(alpha = alpha) %>% 
+            mutate(ncon = n) %>%
+            mutate(power = pt(qt(alpha, df = n-1,
+                                 lower.tail = T),
+                              ncp = ((deficit-xbar)/(sigma*sqrt((n+1)/n))),
+                              df = n-1,
+                              lower.tail = T
+            )) 
+                  
+                  
+                  
+        }
+        if (tail == "Two") {
+          pd <- data.frame(deficit = seq(-4, -0.5, by = 0.5))%>%
+            mutate(Tail = tail) %>% 
+            mutate(alpha = alpha) %>% 
+            mutate(ncon = n) %>%
+            mutate(power = pt(qt(alpha/2, df = n-1,
+                                 lower.tail = T),
+                              ncp = ((deficit-xbar)/(sigma*sqrt((n+1)/n))),
+                              df = n-1,
+                              lower.tail = T) - pt(-qt(alpha/2, df = n-1,
+                                                           lower.tail = T),
+                                                       ncp = ((deficit-xbar)/(sigma*sqrt((n+1)/n))),
+                                                       df = n-1,
+                                                       lower.tail = T) + 1) 
+          
+        }
+        
+        ana_TD_pwr_data <- rbind(ana_TD_pwr_data, pd)
+      }
+    }
+  }
+  ana_TD_pwr_data
+}
+ana_TD <- ana_TD_pwr()
+  
+ana_TD %>% 
+  mutate(power = power*100) %>%
+  mutate(zcc = deficit*-1) %>%
+  select(Tail, alpha, zcc, ncon, power) %>% 
+  pivot_wider(names_from = ncon, values_from = power)  %>% 
+  arrange(zcc) %>% 
+  arrange(alpha) %>% 
+  arrange(Tail) -> ana_TD_arr
+
+
+kable(ana_TD_arr, align = "r", digits = 2, booktabs = T, 
+      caption = "(ref:TD-tab-cap)", 
+      format = "latex",
+      col.names = c("Tails", "(ref:alph)", "Z\\textsubscript{CC}",  unique(ana_TD$ncon)), escape = F) %>%
+  kable_styling(latex_options = c("HOLD_position"),  position = "center") %>% 
+  collapse_rows(columns= c(1, 2), valign = "top", latex_hline = "custom", custom_latex_hline = c(1, 2)) %>% 
+  add_header_above(c(" " = 3, "Control sample size" = 11 )) %>% 
+  add_footnote(label = c('(ref:TD-tab-text)'), notation = "none", escape = FALSE)
+
+
+```
+
+
+(ref:RSDT-tab-text1) *Note:* $\text{Z}_{\text{DCC}} = \frac{z_x^* -z_y^*}{\sqrt{2-2r}}$, i.e. the standardised case score for the intertask \linebreak discrepancy of
+(ref:RSDT-tab-text2) interest where $z_x^*$ and $z_y^*$ are the standardised case scores for the tasks of interest. Higher
+(ref:RSDT-tab-text3) power for small samples and small effect sizes is due to loss of control of Type I errors
+(ref:RSDT-tab-text4) (Crawford & Garthwaite, 2005). Power calculated with 1 000 000 Monte Carlo simulations.
+(ref:alph) $\alpha$
+
+(ref:RSDT-tab-cap) Power for the Revised Standardised Difference Test (Crawford & Garthwaite, 2005). 
+ 
+
+```{r RSDT-tab, echo=FALSE, message=FALSE}
+
+
+load("data/RSDT_tab1M.Rdata")
+
+pwr_RSDT_tab %>% 
+  mutate(power = power*100) %>% 
+  mutate(zdcc = xa_ast*-1) %>%
+  mutate(tail = recode(tail, two.sided = "Two", less = "One")) %>% 
+  rename(Tail = tail) %>% 
+  select(Tail, alpha, zdcc, ncon, power) %>% 
+  pivot_wider(names_from = ncon, values_from = power) %>%
+  arrange(zdcc) %>% 
+  arrange(alpha) %>%
+  arrange(Tail) -> rsdt_pwr_wide
+
+kable(rsdt_pwr_wide, align = "r", digits = 2, booktabs = T, 
+      caption = "(ref:RSDT-tab-cap)", 
+      format = "latex",
+      col.names = c( "Tails", "(ref:alph)", "Z\\textsubscript{DCC}", unique(pwr_RSDT_tab$ncon)), escape = F) %>%
+  kable_styling(latex_options = c("HOLD_position", "scale_down")) %>% 
+  collapse_rows(columns= c(1, 2), valign = "top", latex_hline = "custom", custom_latex_hline = c(1, 2)) %>% 
+  add_header_above(c(" " = 3, "Control sample size" = 11 )) %>%
+  add_footnote(label = c('(ref:RSDT-tab-text1)', '(ref:RSDT-tab-text2)', '(ref:RSDT-tab-text3)',
+                         '(ref:RSDT-tab-text4)'),
+               notation = "none", escape = FALSE)
+
+
+```
+
+
+
+\clearpage
+\restoregeometry
+
+
+
+
+
+
+

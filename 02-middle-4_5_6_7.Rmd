@@ -1,0 +1,369 @@
+# Power in testing for deficits {#section4}
+
+The Z-score method would be appropriate if the control sample were large enough
+(n $\geq$ 50) that the sample distribution closely approximates the Z-distribution.
+But control samples in single-case studies are usually much smaller than this
+(sometimes even smaller than 10), and such restricted samples follow the family
+of t-distributions. These resemble the Z-distribution, but are somewhat flatter,
+with relatively more observations in the tails, so that the likelihood of
+observing an extreme score (say, 2 SD below the mean) is relatively higher. A
+test of deficit based upon the Z-distribution would overestimate the rarity of
+extreme scores in a restricted sample, increasing the rate of false positives.
+@crawford_comparing_1998 thus proposed a modified t-test for the detection of
+single-case deficits. This method controls Type I error rate appropriately with
+restricted control samples, and its results converge with those of the Z-score
+method when control samples are large. Crawford and Howell’s modified t-test is
+now the gold standard Test of Deficit (TD) in neuropsychology.
+
+(ref:FIG2-cap) Power of the case-control Test of Deficit [TD: @crawford_comparing_1998] to detect different effect sizes of deficit ($\text{Z}_{\text{CC}}$) in a single case, with control sample sizes ranging from 4-50, assuming a one-tailed significance criterion of .05. Tabulated values for one and two-tailed tests of deficit are shown in Table \@ref(tab:TD-tab). Note that the Bayesian Test of Deficit [@crawford_point_2010] produces equivalent results to the TD, and has frequentist properties, so may be considered to have the same effective levels of power. Note also that the Unstandardised Difference Test (UDT) [@crawford_testing_2005] is identical to applying the TD to between-task discrepancy scores. Power for the UDT is thus identical with power the TD, but related to the effect size of a between-task discrepancy ($\text{Z}_{\text{DCC}}$) which depends on the intertask correlation, rather than the effect size of a deficit ($\text{Z}_{\text{CC}}$).
+
+
+```{r FIG2, echo = FALSE, fig.cap="(ref:FIG2-cap)", out.width='100%', message=FALSE}
+library(tidyverse)
+
+# fig.height=6, fig.width=6,
+
+ana_TD_pwr <- function () {
+  xbar <- 0
+  sigma <- 1
+  ana_TD_pwr_data <- data.frame()
+  for (n in seq(4, 50, by = 1)) {
+    for (alpha in c(0.05)) {
+      for (tail in c("One")) {
+        
+        if (tail == "One") {
+          pd <- data.frame(deficit = c(-1, -1.5, -2, -2.5, -3, -4))%>%
+            mutate(Tail = tail) %>% 
+            mutate(alpha = alpha) %>% 
+            mutate(ncon = n) %>%
+            mutate(power = pt(qt(alpha, df = n-1,
+                                 lower.tail = T),
+                              ncp = ((deficit-xbar)/(sigma*sqrt((n+1)/n))),
+                              df = n-1,
+                              lower.tail = T
+            )) 
+                  
+                  
+                  
+        }
+        if (tail == "Two") {
+          pd <- data.frame(deficit = c(-1, -1.5, -2, -2.5, -3, -4))%>%
+            mutate(Tail = tail) %>% 
+            mutate(alpha = alpha) %>% 
+            mutate(ncon = n) %>%
+            mutate(power = pt(qt(alpha/2, df = n-1,
+                                 lower.tail = T),
+                              ncp = ((deficit-xbar)/(sigma*sqrt((n+1)/n))),
+                              df = n-1,
+                              lower.tail = T) - pt(-qt(alpha/2, df = n-1,
+                                                           lower.tail = T),
+                                                       ncp = ((deficit-xbar)/(sigma*sqrt((n+1)/n))),
+                                                       df = n-1,
+                                                       lower.tail = T) + 1) 
+          
+        }
+        
+        ana_TD_pwr_data <- rbind(ana_TD_pwr_data, pd)
+      }
+    }
+  }
+  ana_TD_pwr_data
+}
+ana_TD_pwr() %>% select(-Tail) -> m
+
+
+ggplot(m, aes(x=ncon, y=power, group=deficit)) + 
+  geom_line(size=1) +
+  labs(x = "Control sample size (n)", y = "Power") +
+  scale_x_continuous(limits=c(2, 50), breaks=c(4,8,12,16,20,24,28,32,36,40,44,48)) +
+  scale_y_continuous(breaks=c(.1,.2,.3,.4,.5,.6,.7,.8,.9, 1)) +
+  theme_bw() +
+  theme(plot.title = element_text(size = 18), axis.text=element_text(size=10)) + 
+  theme(legend.position = c(0.9, 0.2), legend.text=element_text(size=12),
+        axis.title=element_text(size=14), axis.text=element_text(size=10),
+        panel.grid.minor = element_blank(), aspect.ratio = 1) +
+  annotate("text", x = 50, hjust = 1, y = m[m$n==48, 4][1] + .03, label = "Deficit effect size 1.0", size = 4, colour = "black") +
+  annotate("text", x = 50, hjust = 1, y = m[m$n==48, 4][2] + .03, label = "Deficit effect size 1.5", size = 4, colour = "black") +
+  annotate("text", x = 50, hjust = 1, y = m[m$n==48, 4][3] + .03, label = "Deficit effect size 2.0", size = 4, colour = "black") +
+  annotate("text", x = 50, hjust = 1, y = m[m$n==48, 4][4] + .03, label = "Deficit effect size 2.5", size = 4, colour = "black") +
+  annotate("text", x = 50, hjust = 1, y = m[m$n==48, 4][5] + .03, label = "Deficit effect size 3.0", size = 4, colour = "black") +
+  annotate("text", x = 50, hjust = 1, y = m[m$n==48, 4][6] + .03, label = "Deficit effect size 4.0", size = 4, colour = "black") 
+
+```
+
+
+The t-distribution is more complex than the normal which is reflected in power
+calculations for the TD (see Appendix for details). Not only is power restricted
+by the pre-morbid ability of the patient but also by the control sample size.
+However, power for the TD is conceptually similar to that of the Z-score method
+in that *the upper limit* of power is the probability that the (unobserved)
+pre-morbid performance of the patient was no more than the deficit size above
+the cut-off for a deficit. Figure \@ref(fig:FIG2) shows how
+sample size affects the power of the (one-tailed) TD, for a range of (large)
+effect sizes (see Table \@ref(tab:TD-tab) for tabulated values, including two-tailed tests).
+Power rises steeply as the control sample size increases within the very small
+range (< 10), but asymptotes rapidly, with severely diminishing returns above a
+sample size of around 16-24. Beyond this range, power tends towards the maximum
+possible for this test, already mapped in Figure \@ref(fig:FIG1)c. This ceiling level of power
+is inherently low, so the test of deficit is only really applicable to the study
+of effect sizes ($Z_{CC}$ $\geq$ 2) that would be very large in almost any other context.
+High power ($\geq$ .80) is inherently unachievable for effect sizes of 2.5 or less,
+and very high power ($\geq$ .90) can only be expected for extreme deficits ($Z_{CC}$ > 3),
+equivalent to an individual’s performance being decremented by around
+three-quarters of the full range of abilities in the healthy population.
+Neuropsychological case-studies are only viable at all because brain lesions can
+have such large effects upon cognitive-behavioural abilities.
+
+
+# Testing for dissociations {#section5}
+
+Neuropsychologists are often less interested in whether a patient has a deficit
+for a task (X), than in whether performance of that task (X) is abnormally
+impaired with respect to some other task (Y). Statistically, we wish to evaluate
+whether the between-task discrepancy is more extreme in the single case than in
+the healthy population. Crawford and colleagues have provided two methods based
+on the t-distribution (or asymptotic approximations of it) to make this
+comparison, whilst controlling the false positive rate appropriately [@crawford_testing_2005].
+The simplest solution is applicable only when tasks X and Y
+are both scored on the same scale, with equivalent between-subject variances in
+the healthy population. In this special case, the test can be done directly on
+the paired XY differences, which is the basis of the Unstandardised Difference
+Test (UDT).^[As a rule-of-thumb, the UDT may be applicable to pairs of tasks for
+which it would be sensible to perform a paired t-test within the control group;
+for instance, to compare performance on the same reaching task performed under
+monocular and binocular viewing conditions. Note that the UDT is equivalent to
+applying the TD to the between-task discrepancy scores, rather than to the
+scores of a single task. Power for the UDT is thus identical with power for the
+TD (Figure \@ref(fig:FIG2) and Table \@ref(tab:TD-tab)), but related to the effect size of a between-task
+discrepancy ($Z_{DCC}$; see Section \@ref(section6)) rather than the effect size of a deficit
+($Z_{CC}$).]  More often, however, the two tasks will be on different scales so the
+scores must be standardised (expressed as Z-scores) before the differences are
+calculated, which is the basis of the Revised Standardised Difference Test
+(RSDT). The RSDT is marginally less powerful than the UDT, but much more widely
+applicable, so we will focus exclusively on the RSDT here.
+
+The patient may present with an abnormal discrepancy between tasks if brain
+damage has affected ability in one domain (tapped by task X) but not another
+(tapped by task Y), or has affected one domain more severely than the other.
+These two scenarios, of selective and differential deficit, map onto a
+theoretical distinction between a classical dissociation and a strong
+dissociation [@crawford_wanted_2003; @shallice_neuropsychology_1988]. A
+classical dissociation is held to have special status, licensing stronger
+inferences about the fractionation of underlying mental structure.
+Statistically, however, a classical dissociation requires the assertion of the
+null hypothesis of no deficit for the less affected task. But the severe limits
+on single-case power (Figure \@ref(fig:FIG1)c) make it clear that we can never
+confidently rule out the possibility that a minor deficit has been missed by a
+test of deficit. Consequently, we can never confidently distinguish a classical
+from a strong dissociation [@crawford_wanted_2003; @mcintosh_simple_2018]. In
+light of this limitation, @crawford_wanted_2003 have suggested that classical
+dissociations should be renamed, “putatively classical”. More recently,
+@mcintosh_simple_2018 has argued that the distinction should be abandoned for
+practical purposes, and that a significant intertask discrepancy should be the
+sole criterion for establishing a dissociation. Following this logic, we will
+consider the RSDT (and its relatives) as constituting a simple test of
+dissociation.
+
+# The importance of intertask correlation in testing for dissociations {#section6}
+
+A dissociation might involve a deficit of 2 SD on task X with no deficit on task
+Y, and an equivalently-sized dissociation could arise if a deficit of 3 SD on
+task X were accompanied by a milder deficit of 1 SD on task Y. For ease of
+exposition, let us imagine that these two patterns of dissociation have been
+sustained by two patients who both happened to have performed pre-morbidly at
+exactly the control mean level on both tasks. This situation is depicted in
+Figure \@ref(fig:FIG3), for the two patients and a large matched control group ($n=50$). The
+dissociation between tasks is not captured by the score on task X or Y alone,
+but by the discrepancy between them (Y-X), represented graphically by the
+distance from the clockwise diagonal.
+
+(ref:FIG3-cap) **(a)** Standardised performance on two tasks, X and Y, for 50 healthy control participants (open circles) and two hypothetical patients (black and grey circles). The size of the intertask discrepancy is represented by the distance from the clockwise diagonal. Both patients have an equivalent discrepancy score (Y-X) of 2, but the abnormality of this discrepancy depends on how extreme it is with respect to the distribution of discrepancies in the control group. The three panels illustrate that when the two tasks are more highly correlated in the control sample, the spread of discrepancies in controls is reduced, so the discrepancies in the patients are relatively more extreme. That is, the standardised effect size of the discrepancy ($Z_{DCC}$) is increased, as shown in panel b. **(b)** The relationship between discrepancy score and discrepancy effect size ($Z_{DCC}$), mediated by the strength of the intertask correlation (r) in the control sample. This plot follows the function $Z_{DCC}$ = ($Z_{CC_X} - Z_{CC_Y}) / \sqrt{2-2r}$), where $Z_{CC_X}$ is the standardised deficit on task X and $Z_{CC_Y}$ is the standardised deficit on task Y.
+
+
+```{r FIG3, echo = FALSE, fig.cap="(ref:FIG3-cap)", fig.width=6, fig.height=7, out.width='100%',  warning = FALSE}
+
+cor25 <- data.frame(controls = MASS::mvrnorm(50, mu = c(0, 0), Sigma = matrix(c(1, 0.25, 0.25, 1), nrow = 2)), r = 0.25)
+cor50 <- data.frame(controls = MASS::mvrnorm(50, mu = c(0, 0), Sigma = matrix(c(1, 0.50, 0.50, 1), nrow = 2)), r = 0.50)
+cor75 <- data.frame(controls = MASS::mvrnorm(50, mu = c(0, 0), Sigma = matrix(c(1, 0.75, 0.75, 1), nrow = 2)), r = 0.75)
+
+controls <- rbind(cor25, cor50, cor75)
+
+names(controls) <- c("X", "Y", "r") 
+
+fac_labs = c(`0.25` = "Intertask correlation .25", `0.5` ="Intertask correlation .50", `0.75` ="Intertask correlation .75")
+
+ggplot(controls, aes(x = X, y = Y)) +
+  geom_point(shape = 1, size = 2, alpha = 0.5) +
+  geom_point(aes(x = -2, y =0), shape = 19, color = "black", size = 2) +
+  geom_point(aes(x = -3, y =-1), shape = 19, color = "grey", size = 2) +
+  geom_abline(slope = 1, intercept = -0) +
+  ggtitle("(a)") +
+  xlab("Z-score on task X") +
+  ylab("Z-score on task Y") +
+  facet_wrap(.~r, labeller = labeller(r = fac_labs), nrow = 3) +
+  scale_x_continuous(limits = c(-3.2, 3.2), breaks=c(-2, 0, 2)) +
+  scale_y_continuous(limits = c(-3.2, 3.2), breaks=c(-2, 0, 2)) +
+  theme_bw() +
+  theme(aspect.ratio = 1) -> FIG3a
+        
+        
+        # title = element_text(),
+        # axis.title.x = element_text(size=14), axis.text.x = element_text(size=12),
+        # axis.title.y = element_text(size=14), axis.text.y = element_text(size=12)) 
+
+df <- read.csv(text="d,r,Zdcc")
+
+for(d in 1:4){
+  for(r in seq(0,.9,.01)){
+    Zdcc <- d/sqrt(2-(2*r))
+    df<-rbind(df, cbind.data.frame(d,r,Zdcc))
+  }
+}
+
+
+ggplot(df, aes(x=r, y=Zdcc, group=d))+
+  geom_line(size=1)+
+  labs(y = expression(paste("Discrepancy effect size (", Z[DCC], ")"))) +
+  scale_y_continuous(limits=c(0,10), breaks=c(0,1,2,3,4,6,8))+
+  scale_x_continuous(name="Intertask correlation (r)", limits=c(0,1.2), breaks=c(0,.1,.2,.3,.4,.5,.6,.7,.8,.9))+
+  annotate("text", x = 0.85, hjust = 0, y = df[df$r==.9 & df$d==1, 3] + .15, label = "Discrepancy 1", size = 2.9) +
+  annotate("text", x = 0.85, hjust = 0, y = df[df$r==.9 & df$d==2, 3] + .15, label = "Discrepancy 2", size = 2.9) +
+  annotate("text", x = 0.85, hjust = 0, y = df[df$r==.9 & df$d==3, 3] + .15, label = "Discrepancy 3", size = 2.9) +
+  annotate("text", x = 0.85, hjust = 0, y = df[df$r==.9 & df$d==4, 3] + .15, label = "Discrepancy 4", size = 2.9) +
+  ggtitle("(b)")+
+  theme_bw()+
+  theme(panel.grid.minor = element_blank())-> FIG3b
+        
+        # , panel.grid.minor = element_blank(),
+        # axis.title.x = element_text(size=14), axis.text.x = element_text(size=12),
+        # axis.title.y = element_text(size=14), axis.text.y = element_text(size=12),
+        # title = element_text()) -> FIG3b
+
+gridExtra::grid.arrange(FIG3a, FIG3b, nrow = 1)
+
+
+```
+
+Our hypothetical patients both have a discrepancy of 2, so they are equidistant
+from this diagonal. The abnormality of this discrepancy depends on how extreme
+it is with respect to the distribution of discrepancies in the control group
+(the spread of unfilled circles’ distances from this diagonal). The three panels
+of Figure \@ref(fig:FIG3)a illustrate that when the two tasks are more highly correlated, the
+spread of discrepancies in controls is reduced, so the discrepancies in our
+patients are relatively more extreme. This can be expressed by dividing the
+discrepancy score by the standard deviation of the discrepancies in the control
+group, yielding a standardised effect size for the discrepancy between tasks
+[$Z_{DCC}$: @crawford_point_2010]. When this effect size is larger,
+the discrepancy is more abnormal with respect to the control sample: there is
+stronger evidence for a dissociation.
+
+This influence of intertask correlation is easy to capture mathematically. The
+standardised control scores for each task have (by definition) a mean of zero
+and a standard deviation of 1, so the mean of the distribution of discrepancies
+is always zero, but the standard deviation of the discrepancies is given by
+$\sqrt{2-2r}$ where r is the correlation between tasks. Only when the intertask
+correlation is .50 will the standard deviation of discrepancies be equal to 1.
+In this case, the standardised effect size of the discrepancy ($Z_{DCC}$), obtained
+by dividing the discrepancy score by the standard deviation of discrepancies,
+will equal the discrepancy score itself (2 in our example). However, if the
+intertask correlation is less than .50, the standard deviation of discrepancies
+will be greater than 1 so $Z_{DCC}$ will be smaller; and if the correlation exceeds
+.50, the standard deviation of discrepancies will be less than 1 so $Z_{DCC}$ will be
+larger. The relationship between the intertask discrepancy score and $Z_{DCC}$,
+governed by the strength of the intertask correlation, is plotted in Figure \@ref(fig:FIG3)b
+for four different sizes of discrepancy. This relationship implies that pairs of
+tasks that are more highly correlated in healthy populations provide the
+potential for more highly powered tests of dissociation.
+
+
+# Power in testing for dissociations {#section7}
+
+A case-control test of dissociation (RSDT and its relatives) is a matter of
+estimating the proportion of the healthy population who would produce an
+intertask discrepancy more extreme than that of the single-case. The conceptual
+basis of power for this test is similar to that for the TD: the upper
+limit of power is the probability that the patient’s (unobserved) pre-morbid
+discrepancy between tasks was no more than the acquired discrepancy size away
+from the cut-off for a dissociation. It is less tractable to estimate power
+analytically for the RSDT than for the TD, because its test statistic is only an
+approximation to the t-distribution [@crawford_testing_2005;
+@garthwaite_distribution_2004], so a simulation approach has been used to
+generate the power curves shown in Figure \@ref(fig:FIG4) (see Appendix for
+details). Note that the power functions in Figure \@ref(fig:FIG4) are for a
+two-tailed RSDT, which is the default choice if the researcher has no prior
+commitment to the direction of a dissociation in a given patient [e.g.
+@crawford_testing_2005; @crawford_wanted_2003]. However, in practice, we often
+do have a strong prediction based on a patient’s prior behaviour and/or pattern
+of brain damage [@mcintosh_simple_2018]. If so, then one-tailed tests of
+dissociation should be considered, for the higher power they provide (see
+Section \@ref(section10)).
+
+(ref:FIG4-cap)  **(a)** Power of the Revised Standardised Difference Test [RSDT: @crawford_testing_2005] to detect different intertask discrepancies, mediated by the strength of the intertask correlation (r) in the control sample, assuming a two-tailed significance criterion of .05, and a very large control sample ($n=100$). **(b)** Power of the RSDT to detect different effect sizes of discrepancy ($\text{Z}_{\text{DCC}}$) in a single case, with control sample sizes ranging from 4-50, assuming a one-tailed significance criterion of .05. Tabulated values for the one and two-tailed RSDT are shown in Table \@ref(tab:RSDT-tab).
+
+```{r FIG4, echo = FALSE, fig.cap="(ref:FIG4-cap)", fig.width=8, fig.height=4, out.width='100%'}
+
+##########RSDT POWER fig.height=7, fig.width=14,
+ 
+library(patchwork)
+
+load("data/RSDT_plot_cor_1M.Rdata")
+
+df <- pwr_RSDT_cor
+
+ggplot(df, aes(x = rab, y = power, group = factor(xa_ast) ) ) +
+  geom_line(size = 1) +
+  labs(y = "Power", x = "Intertask correlation (r)", title = "(a)") +
+  scale_x_continuous(limits=c(-0.21, 0.9), breaks=c(0,.1,.2,.3,.4,.5,.6,.7,.8,.9))+
+  scale_y_continuous(breaks=c(.1,.2,.3,.4,.5,.6,.7,.8,.9, 1)) +
+  theme_bw() +
+  theme(panel.grid.minor = element_blank(), aspect.ratio = 1) +
+  annotate("text", x = -0.21, hjust = 0, y = df[df$rab==0 & df$xa_ast==-1, 6] - .02, label = "Discrepancy 1", size =4) +
+  annotate("text", x = -0.21, hjust = 0, y = df[df$rab==0 & df$xa_ast==-2, 6] - .02, label = "Discrepancy 2", size =4) +
+  annotate("text", x = -0.21, hjust = 0, y = df[df$rab==0 & df$xa_ast==-3, 6] - .02, label = "Discrepancy 3", size =4) +
+  annotate("text", x = -0.21, hjust = 0, y = df[df$rab==0 & df$xa_ast==-4, 6] - .02, label = "Discrepancy 4", size =4) -> FIG4a
+
+# plot.title = element_text(size = 18), axis.text=element_text(size=10),
+#         axis.title=element_text(size=16),
+
+load("data/RSDT_plot.Rdata")
+
+pwr_RSDT_plot %>% filter(tail != "less" & !is.na(power)) -> m
+
+ggplot(m) + geom_line(aes(x=ncon, y=power, group=xa_ast), size=1) +
+  labs(x = "Control sample size (n)", y = "Power") +
+  scale_x_continuous(limits=c(2, 50), breaks=c(4,8,12,16,20,24,28,32,36,40,44,48)) +
+  scale_y_continuous(breaks=c(.1,.2,.3,.4,.5,.6,.7,.8,.9, 1)) +
+  ggtitle("(b)")+
+  theme_bw() +
+  theme(panel.grid.minor = element_blank(), aspect.ratio = 1) +
+  annotate("text", x = 50, hjust = 1, y = m[m$n==48, 6][1] + .03, label = "Discrepancy effect size 1.0", size = 4, colour = "black") +
+  annotate("text", x = 50, hjust = 1, y = m[m$n==48, 6][2] + .03, label = "Discrepancy effect size 1.5", size = 4, colour = "black") +
+  annotate("text", x = 50, hjust = 1, y = m[m$n==48, 6][3] + .03, label = "Discrepancy effect size 2.0", size = 4, colour = "black") +
+  annotate("text", x = 50, hjust = 1, y = m[m$n==48, 6][4] + .03, label = "Discrepancy effect size 2.5", size = 4, colour = "black") +
+  annotate("text", x = 50, hjust = 1, y = m[m$n==48, 6][5] + .03, label = "Discrepancy effect size 3.0", size = 4, colour = "black") +
+  annotate("text", x = 50, hjust = 1, y = m[m$n==48, 6][6] + .03, label = "Discrepancy effect size 4.0", size = 4, colour = "black") -> FIG4b
+
+# theme(plot.title = element_text(size = 18), axis.title=element_text(size=16), axis.text=element_text(size=10)) + 
+# legend.position = c(0.9, 0.2), legend.text=element_text(size=12),
+#         axis.title=element_text(size=14), axis.text=element_text(size=10),
+
+FIG4a + FIG4b 
+
+```
+
+
+Figure \@ref(fig:FIG4)b confirms that the power of the (two-tailed) RSDT to detect different
+levels of intertask discrepancy in a single case is modulated dramatically by
+the intertask correlation in healthy participants. This is just an expression of
+the dynamic plotted in Figure \@ref(fig:FIG4)b: for any given discrepancy, the RSDT gains
+power with intertask correlation (Figure \@ref(fig:FIG4)b) because the standardised effect
+size of the discrepancy ($Z_{DCC}$) increases (Figure \@ref(fig:FIG4)a). A more general way to
+investigate the power of the RSDT is thus in terms of its relationship with
+$Z_{DCC}$, which takes intertask correlation into account. Figure \@ref(fig:FIG4)b shows how sample
+size affects the power of the (two-tailed) RSDT, for a range of (large)
+discrepancy effect sizes (see Table \@ref(tab:RSDT-tab) for tabulated values, including
+one-tailed tests). These functions are qualitatively similar to those for a test
+of deficit (Figure \@ref(fig:FIG2)), with high power achievable only for very large effect
+sizes, and control sample size providing little extra power after the first
+16-24 participants.
+

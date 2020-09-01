@@ -1,0 +1,339 @@
+# Introduction {#section1}
+
+In the past 25 years, a range of related statistical methods have been developed
+to compare the test scores of single-cases to those of matched control samples
+[e.g. @crawford_comparing_1998; @crawford_comparing_2011;
+@crawford_comparison_2007; @crawford_testing_2005; @mcintosh_current_2011].
+These case-control comparisons have put the classical concepts of
+neuropsychological deficit and dissociation onto a firmer quantitative footing
+[@crawford_wanted_2003; @mcintosh_simple_2018]. They have acquired the
+status of gold standard inferential tests for investigating patterns of
+neuropsychological impairments at the single-case level, and they have broad
+applicability for defining diagnostic criteria in clinical settings.
+
+The main focus for the development of these tests has been to provide
+transparent control over the rate of false positives (Type I or $\alpha$ errors), the
+frequency with which the test will return a spurious significant result when no
+true deficit (or dissociation) is present. But we should also be concerned about
+the rate of false negatives (Type II or $\beta$ errors), the frequency with which the
+test fails to return a significant result when a true deficit (or dissociation)
+is present. To the extent that we can reduce the false negative rate, our test
+will have higher power (or sensitivity) to detect true effects. Even if we are
+unable to fully control the false negative rate, it is still relevant to
+estimate the likely power of our test, to inform study design and
+interpretation.
+
+Remarkably little attention has been given to the issue of power in single-case
+studies. Of the three main papers that discuss power, one is concerned primarily
+with the effects of departures from normality [@crawford_methods_2006],
+the others with the consequences of choosing different operational criteria to
+classify dissociations [@crawford_detecting_2006; @mcintosh_simple_2018]. Despite a
+growing awareness of the wider importance of statistical power in study design
+and interpretation, there is yet no general primer for power in case-control
+comparisons. The purpose of the present paper is to provide such a primer.
+
+We aim to describe, in minimally technical terms, the nature and limits of power
+in testing for deficits and dissociations. Some of the points we make may seem
+obvious, even self-evident on reflection, especially to
+statistically-sophisticated readers. However, it is our impression that many
+researchers and practitioners who use case-control comparisons have never been
+prompted to consider these issues deeply, and may be unsure how (or why) to
+calculate power for these tests.^[The first author admits to using these
+statistical tests for many years without having thought seriously about their
+probable power, or its determining factors.] The figures and tables in this
+paper will be broadly sufficient to estimate power when testing for deficits and
+dissociations. We also refer the reader to the singcar package for the R
+statistical software environment, which implements a wider range of single-case
+tests (including Bayesian extensions of the frequentist tests covered in this
+primer), and associated power calculations (Rittmo & McIntosh, 2020).
+
+
+# Case-control comparisons as a form of outlier detection {#section2}
+
+In testing for a neuropsychological abnormality, we wish to estimate the
+probability that a patient’s performance for a given task or domain has been
+impacted by brain damage or dysfunction. Ideally, we would do this by evaluating
+current performance with respect to that person’s premorbid performance. This
+may indeed be possible if we wish to study the sequalae of a scheduled event
+such as neurosurgery, and we have had the foresight to characterise premorbid
+performance. But commonly the misfortune that has brought the patient to our
+attention is a sporadic event such as a stroke or head injury. If so, the best
+that we can usually do is to measure post-morbid performance, and compare this
+to the distribution of performance in a sample of healthy controls matched to
+the case on relevant characteristics (e.g. age, sex, handedness, years of
+education). This comparison aims to estimate the probability that we would
+observe performance as extreme as that of our patient if we were to sample a
+member of the healthy population at random. If we find that this probability is
+sufficiently low, we may infer that our patient does not belong to that
+population: we will have evidence for a neuropsychological abnormality.
+
+Case-control comparisons are thus a form of outlier detection, but rather than a
+blanket screening for outlying observations, we target the case of interest and
+ask whether it is an outlier with respect to the control sample. In the standard
+normal distribution (the Z-distribution), only 5% of cases fall more than 1.96
+standard deviations from the mean (2.5% in either tail) (Figure \@ref(fig:FIG1)a). To apply
+this to the evaluation of a single-case, we could express the patient’s test
+score as a Z-score [i.e. (patient score - control mean)/control standard
+deviation)], and regard a Z-score lower than -1.96 or higher than 1.96 as
+evidence of abnormality. This would constitute a two-tailed test of abnormality
+with a significance criterion of .05. However, when studying neuropsychological
+cases, we are often interested specifically in performance that is lower than
+normal, indicating a deficit. To frame a one-tailed test, we could regard a
+Z-score below -1.65 as evidence of a deficit, because fewer than 5% of cases
+fall more than 1.65 standard deviations below the mean (Figure \@ref(fig:FIG1)a).
+
+(ref:FIG1-lab) Dissociation effect size ($\text{Z}_{\text{CC}}$)
+
+(ref:FIG1-cap) **(a)** The standard normal (Z) distribution, showing two-tailed (upper and lower) cut-offs, and the one-tailed lower cut-off for a case-control test of deficit, with a significance ($\alpha$) criterion of .05. **(b)** Two hypothetical patients (A and B), both of whom sustain a 2 SD performance deficit due to brain damage. The letters show the levels of pre-morbid performance, and the leftward arrows show the shift in performance due to the deficit. Because of differing levels of premorbid performance, patient A is cast into the abnormal range but patient B is not. Pre-morbid performance would need to be within the shaded region of the curve in order for a deficit of this size to be detected by this test. The power of the test is thus equal to the probability that the premorbid performance was in the shaded region of the Z-distribution. **(c)** Power of this Z-based test to detect different sizes of deficit, given a one-tailed significance ($\alpha$) criterion of .05 (black line), or more conservative (.025) or liberal (.10) significance criteria (grey lines). Because this figure is derived from the Z-distribution, it shows the power that could be achieved with an unrestricted control sample. It therefore traces the upper limits on power for case-control tests of deficit.
+
+```{r FIG1, echo=FALSE, fig.width=16.5, fig.height=10, out.width='100%', fig.cap="(ref:FIG1-cap)", message=FALSE}
+
+library(tidyverse)
+library(patchwork)
+library(ggpattern)
+
+Z_dist <- data.frame(Z=seq(-3.5, 3.5, length.out = 1000),
+                     p=dnorm(seq(-3.5, 3.5, length.out = 1000))) %>%
+  mutate(variable = case_when(
+    (Z <= qnorm(pnorm(-1.65))) ~ "1t_lo",
+    (Z>=qnorm(pnorm(-1.96), lower.tail = F)) ~ "2t_hi",
+    TRUE ~ NA_character_))
+
+
+ggplot(Z_dist, aes(x = Z, y = p)) +
+  geom_area_pattern(data = filter(Z_dist, variable == '1t_lo'), pattern = "stripe",
+                    pattern_colour = "darkgrey", pattern_fill = "darkgrey",
+                    fill = 'white', pattern_spacing = 0.01, 
+                    pattern_angle = -45) +
+  geom_area_pattern(data = filter(Z_dist, variable == '2t_hi'), pattern = "stripe",
+            pattern_colour = "darkgrey", pattern_fill = "darkgrey",
+            fill = 'white', pattern_spacing = 0.01, 
+            pattern_angle = 45) +
+  geom_line(size=1)+
+  geom_vline(xintercept=-1.96, linetype="dashed")+
+  geom_vline(xintercept=1.96, linetype="dashed")+
+  geom_vline(xintercept=-1.65, linetype="dashed")+
+  geom_vline(xintercept=0, linetype="dotted")+
+  ggtitle("(a)") +
+  #2t_lo_label
+  annotate("text", x = -2, y = 0.42, label = "-1.96", hjust=1) +
+  annotate("text", x = -2, y = 0.4, label = "two-tailed", hjust=1) +
+  annotate("text", x = -2, y = 0.38, label = "lower cut-off", hjust=1) +
+  #1t_lo_label
+  annotate("text", x = -1.6, y = 0.42, label = "-1.65", hjust=0) +
+  annotate("text", x = -1.6, y = 0.40, label = "one-tailed", hjust=0) +
+  annotate("text", x = -1.6, y = 0.38, label = "lower cut-off", hjust=0) +
+  #2t_hi_label
+  annotate("text", x = 2, y = 0.42, label = "1.96", hjust=0) +
+  annotate("text", x = 2, y = 0.40, label = "two-tailed", hjust=0) +
+  annotate("text", x = 2, y = 0.38, label = "upper cut-off", hjust=0) +
+  #2t_lo arrow
+  geom_curve(data = data.frame(),
+             aes(x = -2.8, y = 0.08, xend = -2.2, yend = 0.02),
+             alpha = 1,
+             arrow = arrow(
+               length = unit(0.15, "cm"), 
+               type="open",
+               ends = "last"
+             ),
+             lineend = "round",
+             colour = "black",
+             size = 0.5,
+             angle = 90,
+             curvature = 0,
+             ncp = 50
+  )+
+  #1t_lo arrow
+  geom_curve(data = data.frame(),
+             aes(x = -1.2, y = 0.08, xend = -1.8, yend = 0.02),
+             alpha = 1,
+             arrow = arrow(
+               length = unit(0.15, "cm"), 
+               type="open",
+               ends = "last"
+             ),
+             lineend = "round",
+             colour = "black",
+             size = 0.5,
+             angle = 90,
+             curvature = 0,
+             ncp = 50
+  )+
+  #2t_hi arrowl
+  geom_curve(data = data.frame(),
+             aes(x = 2.8, y = 0.08, xend = 2.2, yend = 0.02),
+             alpha = 1,
+             arrow = arrow(
+               length = unit(0.15, "cm"), 
+               type="open",
+               ends = "last"
+             ),
+             lineend = "round",
+             colour = "black",
+             size = 0.5,
+             angle = 90,
+             curvature = 0,
+             ncp = 50
+  )+
+  #percent labels
+  annotate("text", x = 3.0, y = 0.09, label = "2.5%") +
+  annotate("text", x = -2.9, y = 0.09, label = "2.5%") +
+  annotate("text", x = -1, y = 0.09, label = "2.5%") +  
+  scale_x_continuous(name = "Z-score", limits = c(-3.5,3.5), breaks = c(-3, -2,-1,0,1,2,3))+
+  theme_bw()+
+  theme(panel.grid = element_blank(), axis.title.x = element_text(size=20), axis.text.x = element_text(size=12),
+        axis.title.y = element_blank(), axis.text.y = element_blank(), axis.ticks.y = element_blank(),
+        title = element_text(size=18), aspect.ratio =.5) -> FIG1a
+
+
+Z_dist <- data.frame(Z=seq(-3.5, 3.5, length.out = 1000),
+                     p=dnorm(seq(-3.5, 3.5, length.out = 1000))) %>%
+  mutate(variable = case_when(
+    (Z <= qnorm(pnorm(-1.65))) ~ "1t_lo",
+    (Z <= qnorm(pnorm(0.35))) ~ "zone",
+    TRUE ~ NA_character_))
+
+ggplot(Z_dist, aes(x = Z, y = p)) +
+  geom_area_pattern(data = filter(Z_dist, variable == '1t_lo'), pattern = "stripe",
+            pattern_colour = "darkgrey", pattern_fill = "darkgrey",
+            fill = '#e7e7e7', pattern_spacing = 0.01, 
+            pattern_angle = -45) +
+  geom_area(data = filter(Z_dist, variable == 'zone'), fill = "#e7e7e7", alpha = 1) +
+  geom_line(size=1)+
+  geom_vline(xintercept=0.35)+
+  geom_vline(xintercept=-1.65, linetype="dashed")+
+  ggtitle("(b)") +
+  #geom_vline(xintercept=0, linetype="dotted")+
+  #1t_lo_label
+  annotate("text", x = -1.6, y = 0.42, label = "-1.65", hjust=0) +
+  annotate("text", x = -1.6, y = 0.40, label = "one-tailed", hjust=0) +
+  annotate("text", x = -1.6, y = 0.38, label = "lower cut-off", hjust=0) +
+  #2t_hi_label
+  annotate("text", x = .4, y = 0.42, label = "0.35", hjust=0) +
+  annotate("text", x = .4, y = 0.40, label = "upper limit of premorbid performance for", hjust=0) +
+  annotate("text", x = .4, y = 0.38, label = "detection of 2SD deficit after brain damage", hjust=0) +
+  #percent labels
+  #annotate("text", x = 3.0, y = 0.09, label = "2.5%") +
+  #annotate("text", x = -2.9, y = 0.09, label = "2.5%") +
+  #annotate("text", x = -1, y = 0.09, label = "2.5%") +  
+  #PATIENT A
+  geom_text(aes(x=0.02, y= .035),label="A", size=6)+
+  geom_segment(x = -.1, y = 0.03, xend = -2, yend = 0.03,
+               lineend = "round",linejoin = "round", size = 1, 
+               arrow = arrow(length = unit(0.25, "cm")),
+               colour = "black") +
+  #PATIENT B
+  geom_text(aes(x=1.02, y= .13),label="B", size=6)+
+  geom_segment(x = 0.9, y = .127, xend = -1, yend = 0.127,
+               lineend = "round",linejoin = "round", size = 1, 
+               arrow = arrow(length = unit(0.25, "cm")),
+               colour = "black") +
+  ####
+  scale_x_continuous(name = "Z-score", limits = c(-3.5,3.5), breaks = c(-3, -2,-1,0,1,2,3))+
+  theme_bw()+
+  theme(panel.grid = element_blank(), axis.title.x = element_text(size=20), axis.text.x = element_text(size=12),
+        axis.title.y = element_blank(), axis.text.y = element_blank(), axis.ticks.y = element_blank(),
+        title = element_text(size=18), aspect.ratio =.5) -> FIG1b
+
+
+
+deficit = seq(0, 4.5, length.out = 100)
+
+zpower <- data.frame(deficit = deficit, power05 = pnorm(-1.644854 + deficit),
+                     power10 = pnorm(-1.281552 + deficit), power025 = pnorm(-1.959964 + deficit))
+
+ggplot(zpower) +
+  geom_line(aes(x = deficit, y = power05), size=1) +
+  geom_line(aes(x = deficit, y = power10), size=.7, colour="darkgrey") +
+  geom_line(aes(x = deficit, y = power025), size=.7, colour="darkgrey") +
+  annotate("text", x = -.05, y = 0.052, label = ".05", hjust=1) +
+  annotate("text", x = -.05, y = 0.1, label = ".10", hjust=1, colour="darkgrey") +
+  annotate("text", x = -.05, y = 0.015, label = ".025", hjust=1, colour="darkgrey") +
+  annotate(geom = "text", x = -.5, y = 0.05, label = paste("alpha"),parse = T, size = 10)+
+  labs(x = expression(paste("Deficit effect size (", Z[CC], ")"))) +
+  scale_x_continuous(limits=c(-.5,4.5))+
+  scale_y_continuous(breaks=seq(0,1,.1), name = "Power")+
+  ggtitle("(c)") +
+  theme_bw()+
+  theme(axis.title = element_text(size=20), axis.text = element_text(size=12),
+        title = element_text(size=18), aspect.ratio =1) -> FIG1c
+
+
+(FIG1a/FIG1b) | FIG1c
+
+
+
+```
+
+These Z-based methods would be appropriate if we were to compare the patient
+against a large enough control sample (e.g. n $\geq$ 50), because a
+normally-distributed sample of this size would closely approximate the standard
+normal (Z) distribution for the whole population. With more restricted control
+samples, however, using the Z distribution would underestimate the likelihood of
+extreme scores, and inflate the rate of false positives. To avoid this problem,
+case-control tests based on the t-distribution have been developed, which take
+sample size into account. We will turn to these methods in Section \@ref(section4), but for
+initial purposes the Z-score method provides a maximally simple framework within
+which to illustrate the origins and limits of power in case-control comparisons.
+
+
+
+# The origins and limits of power in a case-control comparisons {#section3}
+
+The power of any hypothesis-testing procedure is the probability that it will
+correctly reject the null hypothesis when the null hypothesis is false or, more
+directly, that it will detect a true effect when present. For a case-control
+test of deficit, for instance, the power of the test would be its ability to
+detect a true deficit when present. Power is the simple complement of the false
+negative rate ($\beta$), and is given by 1-$\beta$, though sometimes expressed as a
+percentage [(1-$\beta$)*100].
+
+If a patient who was pre-morbidly a part of the healthy population incurs a
+deficit in a tested ability, their score will be shifted relative to controls.
+The size of this shift is the effect of the deficit, which we can also express
+in terms of standard deviations of the control mean. This gives us a
+standardised effect size of the deficit, which @crawford_point_2010 labelled $Z_{CC}$
+(i.e. the “case-controls” Z-score). We cannot measure the deficit directly,
+however, we can only observe the post-morbid performance, which is co-determined
+by the level of premorbid performance and the size of the deficit. Whether or
+not a given cut-off will detect a deficit of a given size when evaluating
+post-morbid performance thus depends critically upon the patient’s (unobserved)
+premorbid ability.
+
+Two examples are depicted in Figure \@ref(fig:FIG1)b, with the cut-off for a deficit set at
+1.65 SD below the mean. These data are invented, so we can have full knowledge
+of both the size of the deficit and the pre-morbid ability. Patient A performed
+pre-morbidly at the mean level of controls, but acquired a 2 SD deficit due to
+brain damage so would be shifted to an observed post-morbid Z score of –2; this
+is below the cut-off, so the deficit would be detected. But Patient B, who
+pre-morbidly scored 1 SD above the mean, and sustained exactly the same deficit,
+would be shifted to a score of -1, and the deficit would not be detected. In
+general, for a deficit of 2 SD to be detected, a patient’s premorbid performance
+would need to have been within the shaded region in Figure \@ref(fig:FIG1)b. Premorbid
+performances higher than this would not be pushed into the abnormal range by a 2
+SD deficit.
+
+The power of a one-tailed test to detect a 2 SD deficit is therefore the same as
+the probability that the patient’s premorbid performance was within the shaded
+portion of the distribution up to .35 standard deviations above the mean (2 SD
+above the cut-off of -1.65). This is given by the area under the standard normal
+curve below .35, which can be obtained from a relevant Z table or calculator:
+63.7% of observations fall less than .35 SDs above the mean, so our test has .64
+power to detect a deficit of effect size 2 SD. If instead the deficit were 1.65
+SD, the shaded zone would perfectly cover the lower half of the distribution,
+and the power of our test would be exactly .50. Power for a case-comparison test
+of deficit is conceptually simple: *it is the probability that the (unobserved)
+pre-morbid performance of the patient was no more than the deficit size above
+the cut-off for a deficit*.
+
+Figure \@ref(fig:FIG1)c maps the relationship between deficit size and power for a one-tailed
+test of deficit based on the Z-distribution, using a conventional significance
+(alpha) criterion of .05 (equivalent curves for alphas of .1 and .025 are also
+shown for comparison). There are two important points to note. The first, which
+is obvious from the figure, is that high power (> .80) is achieved only for very
+large effect sizes, greater than 2.5 SD. The second is that, because this figure
+is derived from the Z-distribution, it shows the power that could be achieved
+with an unrestricted control sample. It therefore traces the upper limits on
+power for case-control tests of deficit.
+
+

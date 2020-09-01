@@ -1,0 +1,66 @@
+---
+title: "Power calculations in single case neuropsychology: a practical primer"
+author:
+  - name: Robert D McIntosh
+    email: r.d.mcintosh@ed.ac.uk
+    affiliation: UOE
+    footnote: 1
+  - name: Jonathan Ö Rittmo
+    email: j.rittmo@gmail.com
+    affiliation: UOE
+address:
+  - code: UOE
+    address: Human Cognitive Neuroscience, Psychology, University of Edinburgh, UK
+footnote:
+  - code: 1
+    text: "Corresponding Author"
+abstract: |
+  Researchers and clinicians in neuropsychology often compare individual
+  patients against healthy control samples, to quantify evidence for
+  cognitive-behavioural deficits and dissociations. Statistical methods for
+  these comparisons have been developed that control Type I (false positive)
+  errors effectively. However, remarkably little attention has been given to the
+  power of these tests. In this practical primer, we describe, in minimally
+  technical terms, the origins and limits of power for case-control comparisons.
+  We argue that power calculations can play useful roles in single-case study
+  design and interpretation, and we make suggestions for optimising power in
+  practice. As well as providing figures, tables and tools for estimating the
+  power of case-control comparisons, we hope to assist researchers in setting
+  realistic expectations for what such tests can achieve in general.
+
+journal: "AMPPS"
+date: "`r Sys.Date()`"
+bibliography: power_primer.bib
+site: bookdown::bookdown_site
+link-citations: yes
+linkcolor: blue
+number_sections: false
+keywords: |
+  Single-case, neuropsychological deficit; dissociation; power; statistical methods.
+#linenumbers: true
+#numbersections: true
+csl: apa.csl
+output:
+  bookdown::pdf_book:
+    base_format: rticles::elsevier_article
+    latex_engine: xelatex
+header-includes: |
+  \usepackage{setspace}\onehalfspacing
+  \usepackage{float}
+  \floatplacement{figure}{H}
+  \usepackage{amsmath}
+  \usepackage[makeroom]{cancel}
+  \usepackage{multirow}
+  \usepackage{pbox}
+  \usepackage{caption}
+  \usepackage{graphicx}
+  \usepackage{afterpage}
+  \usepackage[margin=4.5cm]{geometry}
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+
+```

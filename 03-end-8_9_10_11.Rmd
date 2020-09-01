@@ -1,0 +1,248 @@
+# Why sample size doesn’t help (beyond a point) {#section8}
+
+Figures \@ref(fig:FIG2) and \@ref(fig:FIG4)b show that sample size is a powerful
+determinant of power when the control group is small (<16), but they also show
+that it is not the fundamental limiting factor. There are hard limits on power,
+which do not apply to more typical hypothesis tests, such as paired or
+independent t-tests. For those more typical tests, the critical comparison can
+always be boiled down to testing whether the mean difference between two
+conditions or groups is different from zero. The precision with which this
+judgement can be made depends upon how close the estimate of the mean difference
+is likely to be to the true (population) mean difference. This is indexed by the
+standard error of the mean, which is inversely proportional to the square root
+of the sample size (SEM = SD/$\sqrt{N}$), so that increasing the sample size
+reduces the standard error, allowing us to discriminate smaller and smaller
+differences from zero. In principle, whatever size of effect we are targeting,
+any level of power (up to 100%) can be achieved if only we have a large enough
+sample size.
+
+Case-control comparisons, by contrast, do not boil down to a comparison between
+two means, but to a comparison of one observation to the spread of observations
+in a sample: they are a targeted form of outlier detection (Section \@ref(section2); Figure
+\@ref(fig:FIG1)). The most relevant measure of spread here is not the standard error, which
+characterises the sampling distribution of the mean, but the standard deviation,
+which characterises the distribution of observations in the population. Unlike
+the standard error, the standard deviation does not get smaller as we increase
+the sample size, it just gives a more accurate estimate of the true population
+value. If the control sample is large enough (e.g. n $\geq$ 50), then its mean and
+standard deviation will be very good estimates of the population values, and the
+power of our case-control test will be maximal, but not necessarily high (Figure
+\@ref(fig:FIG1)c). Power in case-control comparisons is always limited by the probability that
+the (unobserved) pre-morbid performance of the patient was no more than the
+deficit/discrepancy size away from the critical cut-off. For instance, if our
+patient was pre-morbidly at the top end of the control range of abilities, we
+will inevitably fail to detect all but the most severe of acquired deficits,
+regardless of how many control participants we test.
+
+
+# Using power calculations in single-case studies {#section9}
+
+The canonical role of a priori power calculations is to help a researcher set an
+appropriate sample size to achieve a desired (high) level of power for a
+hypothesis test. But the foregoing discussion shows that the power of
+case-control comparisons is chronically limited. Beyond testing a
+reasonably-sized control sample (e.g. n > 16), there may be little that the
+researcher can do to increase power (though see Section \@ref(section10)). This suggests that
+we will rarely be able to use a priori power calculations to ensure that a
+case-control study is adequately powered by design. A more common role for these
+calculations may be in helping researchers to estimate how sensitive their
+single-case tests will be to the effects of interest. This might be done with
+respect to prior estimates of expected effect sizes, or it might be done without
+such knowledge. Brief examples of the use of power calculations in both
+scenarios will be given, from the first author’s recent research.
+
+@hassan_size-weight_2020 re-examined the claim that patient
+DF, a much-studied patient with visual form agnosia following bilateral lesions
+to the ventral visual stream, does not experience a normal size-weight illusion.
+The size-weight illusion is a striking phenomenon whereby smaller objects are
+perceived as heavier during lifting than larger objects of equal weight
+[@buckingham_getting_2014]. This illusion implies that perceptions of heaviness are
+influenced by sensory cues about object size. The possible disruption of this
+illusion in patient DF suggests that the critical size cues may be processed in
+the ventral visual stream. The specific claim was that DF does not experience
+the size-weight illusion when object size is cued visually, but has a normal
+strength illusion when kinaesthetic size cues are provided 
+[@dijkerman_visuomotor_2004; @mcintosh_seeing_2000]. However, the evidence in these prior
+reports was informal, and involved no comparisons with healthy controls, so the
+claim was in need of confirmatory testing.
+
+A first step was taken in a pilot study with patient DF, to estimate her visual
+size-weight illusion [@mcintosh_disrupted_2016]. This pilot study
+suggested that DF had a very large deficit in illusion magnitude, with an effect
+size ($Z_{CC}$) of -3.4 relative to a small group of controls ($n=6$). A formal test of
+this deficit was then mounted, with a much larger age-matched control sample
+($n=28$), and a parallel assessment of the kinaesthetic size-weight illusion. Even
+using a more modest estimate for the size of the deficit ($Z_{CC_X} = -3$), the a
+priori power to detect it using a one-tailed alpha of .05 approached .90 (see
+Figure \@ref(fig:FIG2) or Table \@ref(tab:TD-tab)). Since the theory predicted that the kinaesthetic
+size-weight illusion should be unaffected ($Z_{CC_Y} = 0$), we were also able to
+define an expected discrepancy of 3 between the visual and kinaesthetic
+conditions. Moreover, the correlation between these conditions in the control
+group was r = .62, so that the estimated effect size for the dissociation was
+even larger than the discrepancy score ($Z_{DCC} = 3.44$) (see Figure \@ref(fig:FIG4)a), and the a
+priori power for a directional (one-tailed) test of dissociation (RSDT) exceeded
+.90 (see Table \@ref(tab:RSDT-tab)). This is a (possibly rather rare) instance in which the tests
+of deficit and dissociation were estimated to be highly powered. It is also, to
+our knowledge, the first neuropsychological single-case study to feature a
+priori power calculations.^[The experiment confirmed the expected deficit in the
+visual size weight illusion, albeit with a more modest effect size estimate: 
+$Z_{CC} = -1.76 \  [95\% \ CI: -2.345, -1.155]$; but the dissociation between visual and
+kinaesthetic conditions was not confirmed by the RSDT [@hassan_size-weight_2020].
+Because the two conditions were parallel versions of the same task, it might
+have been legitimate to use the UDT rather than the RSDT to test this
+dissociation (but this would not have found a dissociation either).]
+
+Another, maybe more routine use for power calculations, is in setting realistic
+expectations for the range of abnormalities to which our case-control tests will
+be sensitive. @mitchell_assessment_2020 published a
+protocol for the assessment of visually-guided reaching deficits in patients
+with mild-to-moderate Alzheimer’s disease and patients with Mild Cognitive
+Impairment. A control sample size of 24 was proposed in order to ensure that
+individual tests of deficit would achieve close to the maximum possible power
+(see Figure \@ref(fig:FIG2)). Nonetheless, it was emphasised that the tests could only be
+expected to be sensitive to large abnormalities, with less than .80 power for
+deficit effect sizes below around 2.5 (see Figure \@ref(fig:FIG2) or Table \@ref(tab:TD-tab)). As in this
+multiple single-case study, power calculations can inform the choice of research
+question, the design of the study, and the interpretation of outcomes, even if
+the practical limits on power cannot be overcome.
+
+# Optimising power in single-case studies {#section10}
+
+Low power in single-case studies is aggravated by small control samples, but
+cannot be wholly ameliorated by increasing control numbers (Section \@ref(section8)). Beyond
+sample size, the primary determinants of statistical power are the alpha
+significance criterion, and the size of the effect targeted. This suggests a few
+possible strategies for optimising the power of these tests.
+
+The simplest way to increase the power of any significance test is just to adopt
+a less stringent significance criterion, for instance p < .10 instead of the
+more conventional p < .05 (see Figure \@ref(fig:FIG1)c). This would raise the power of the
+test to identify a true effect when present, though at the cost of increasing
+the rate of false positives when no true effect is present (from 5% to 10%).
+Whether this is a worthwhile trade-off depends on how costly the researcher
+considers false negative and false positive errors to be in the context of their
+study. A widely-known suggestion, from @cohen_statistical_1988, is that a study using
+a-significance criterion of .05 (5% false positive rate) might aim for a power
+of .80 (20% false negative rate), implying that false positives are four times
+as costly as false negatives. This might be a reasonable suggestion, assuming
+that the researcher has selected the conventional (but arbitrary) significance
+criterion of .05 proposed by @fisher_statistical_1925. However, neither Fisher nor Cohen
+were laying down rules to be followed blindly; they were encouraging researchers
+to choose criteria appropriate to the aims of their own particular study.
+
+Given that the power for a case-control comparison to detect an effect size of 2
+barely exceeds .60 (~40% false negative rate), the only way to preserve a
+four-to-one balance of false negatives to false positives, if desired, would be
+to relax the significance criterion to .10. It might indeed be rational to relax
+the significance criterion (perhaps even further than .10) for some purposes,
+such as when screening for relatively common conditions, or in exploratory
+research, in order to increase the power to detect possible abnormalities. On
+the other hand, or in other contexts, researchers (or reviewers) may be
+unwilling to tolerate the elevated risk of false positives that this would
+entail. Another way to maximise power is to adopt a one-tailed significance
+criterion if this is reasonable in the context of the study; specifically, when
+the researcher has a directional prediction, and no theoretical interest in
+interpreting an effect in the opposite direction. One-tailed tests are the
+default choice (by definition) for a test of deficit, but we may also have a
+prior commitment to a directional dissociation, in which case a one-tailed test
+of dissociation also may be appropriate. An example of this was provided in the
+size-weight illusion study discussed in Section \@ref(section9) [@hassan_size-weight_2020].
+
+Other strategies might focus on the targeted effect size. This primer has shown
+that case-control comparisons can achieve respectable power (> .60) only for
+effects that would be very large in most other contexts (standardised effect
+sizes of 2 and upward). A first consideration, then, is that researchers should
+target large effects, and accept that more subtle effects cannot be studied
+reliably. As often noted, neuropsychological case-studies are viable precisely
+because brain damage and dysfunction can have such pronounced effects upon
+cognition and behaviour. A second consideration is that, although we cannot
+alter the neuropsychological consequences of a patient’s lesion, we can try to
+limit the background noise against which it is measured. Reducing measurement
+error will give a more precise estimate of the patient’s post-morbid
+performance, enhancing our ability to identify true effects of interest. Similar
+improvements in the precision of estimation within control participants will
+reduce the control sample variance, thereby increasing the standardised effect
+size associated with a given deficit, improving our power to detect it.
+
+Strategies for reducing measurement noise are not different in single-case
+studies than in other behavioural studies. We should aim to select and develop
+valid, reliable tests of a targeted ability, with scores that are
+well-distributed in healthy samples, and not prone to floor or ceiling effects
+[@crawford_methods_2006]. We should collect more observations per
+participant, if possible, and make them as systematically as we can, for more
+reliable estimates of performance. Case-control comparisons also allow for the
+inclusion of covariates, providing another way to reduce residual variance
+[@crawford_comparing_2011]. Crawford and colleagues originally recommended that
+covariates should be included only given an observed correlation of at least .30
+with a targeted task in the control sample. However, we would argue that a
+preferable strategy may be to include covariates of potential relevance in the
+analysis regardless of the observed correlation (e.g. age is routinely collected
+and may be relevant to performance on a wide-range of cognitive tests). One
+degree of freedom is sacrificed for each covariate included, so we should build
+this into our design by testing an additional control participant for each
+covariate we intend to include. The burden of extra recruitment is offset
+somewhat by greater flexibility, since controls no longer need to be matched so
+closely to the patient, but can bracket the patient on the covariate of interest
+[@crawford_comparing_2011].
+
+
+
+# Conclusion {#section11}
+
+Our first purpose in this primer has been to present and explain the main facts
+of statistical power for case-control comparisons in neuropsychology. The most
+salient fact is that power is chronically low, as has been noted in prior
+discussions 20[e.g. @crawford_detecting_2006; @crawford_methods_2006; @mcintosh_simple_2018]. The
+limiting factor is the nature of the statistical test itself, which we have
+characterised as a form of outlier detection, but the problem is aggravated by
+the use of small control samples. These tests have been designed to control
+false positive rates even with very small control samples, but a moment’s
+consideration of the likely false negative rates should warn against using such
+small samples. We would suggest that control sample sizes for single-case
+studies should not be below eight, and that two (or even three) times that many
+control participants is generally desirable. Some other recommendations for
+optimising power were given in Section \@ref(section10).
+
+Our second purpose has been to provide tools for power calculations when testing
+for deficits and dissociations. Figures \@ref(fig:FIG2) and \@ref(fig:FIG2) and
+Tables \@ref(tab:TD-tab) and \@ref(tab:RSDT-tab) show power across a range of
+likely parameters, and should enable ballpark estimates, adequate for most
+purposes. The `singcar` package for R supports power calculations, and for a
+wider range of tests (Rittmo & McIntosh, 2020). However, the ability to
+calculate power for a given effect size may engender a false sense of precision
+or control. In fact, the estimates of effect size in single-case studies are
+themselves subject to a high degree of uncertainty, with very wide confidence
+(or credible) intervals [e.g. @crawford_point_2010], and power calculations
+based on such estimates will also be imprecise. Moreover, in a typical
+neuropsychological case study, we have little control over the effect sizes we
+encounter, and limited scope to achieve a desired level of power. Nonetheless, a
+priori power calculations can play useful roles in study design and
+interpretation, as illustrated in Section \@ref(section9).
+
+Finally, in highlighting the practical realities of power in case-control
+comparisons, we hope to assist researchers in setting realistic expectations for
+what such tests can achieve in general. This brief primer may thus inform a
+broader discussion of the epistemological status of the quantitative
+neuropsychological case study as a method for investigating the organisation of
+mind and brain.
+
+# Open data and tools {-}
+
+The code for our power calculations and simulations is available at repolink.
+Power calculations for a wider range of single-case tests are supported by the
+singcar package for R, the developmental version of which can be accessed 
+[here](https://github.com/jorittmo/singcar)^[https://github.com/jorittmo/singcar].
+
+# References {-}
+
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+\setlength{\parskip}{2pt}
+\noindent
+
+<div id="refs"></div>
+
+\setlength{\parindent}{0.2in}
+\setlength{\leftskip}{0in}
+\setlength{\parskip}{0pt}
+
