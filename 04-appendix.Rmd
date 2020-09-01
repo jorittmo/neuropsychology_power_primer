@@ -29,7 +29,9 @@ n+1th draw and comparing that observation to the n others using the RSDT test
 formula. This was repeated 1 000 000 times, and power was found by dividing the
 number of significant tests by the total number of tests run, for each parameter
 combination of interest. The code for our calculations and simulations is
-available at repolink. Power calculations for a wider range of single-case tests
+available 
+[here](https://github.com/jorittmo/neuropsychology_power_primer)^[https://github.com/jorittmo/neuropsychology_power_primer].
+Power calculations for a wider range of single-case tests
 are supported by the singcar package for R, the developmental version of which can be 
 accessed [here](https://github.com/jorittmo/singcar)^[https://github.com/jorittmo/singcar].
 

@@ -228,7 +228,8 @@ mind and brain.
 
 # Open data and tools {-}
 
-The code for our power calculations and simulations is available at repolink.
+The code for our power calculations and simulations is available 
+[here](https://github.com/jorittmo/neuropsychology_power_primer).
 Power calculations for a wider range of single-case tests are supported by the
 singcar package for R, the developmental version of which can be accessed 
 [here](https://github.com/jorittmo/singcar)^[https://github.com/jorittmo/singcar].
