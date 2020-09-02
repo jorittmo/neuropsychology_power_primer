@@ -1,5 +1,5 @@
 ---
-title: "Power calculations in single case neuropsychology: a practical primer"
+title: "Power calculations in single-case neuropsychology: a practical primer"
 author:
   - name: Robert D McIntosh
     email: r.d.mcintosh@ed.ac.uk
@@ -28,15 +28,15 @@ abstract: |
   power of case-control comparisons, we hope to assist researchers in setting
   realistic expectations for what such tests can achieve in general.
 
-journal: "AMPPS"
+journal: "PsyArXiv"
 date: "`r Sys.Date()`"
 bibliography: power_primer.bib
 site: bookdown::bookdown_site
 link-citations: yes
 linkcolor: blue
-number_sections: false
+#number_sections: false
 keywords: |
-  Single-case, neuropsychological deficit; dissociation; power; statistical methods.
+  Single-case; deficit; dissociation; power; statistical methods.
 #linenumbers: true
 #numbersections: true
 csl: apa.csl
@@ -56,6 +56,13 @@ header-includes: |
   \usepackage{graphicx}
   \usepackage{afterpage}
   \usepackage[margin=4.5cm]{geometry}
+  \usepackage{cleveref}
+  \makeatletter
+  \let\@afterindenttrue\@afterindentfalse
+  \makeatother
+  \makeatletter
+  \newcommand\footnoteref[1]{\protected@xdef\@thefnmark{\ref{#1}}\@footnotemark}
+  \makeatother
 
 ---
 

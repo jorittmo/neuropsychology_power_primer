@@ -27,9 +27,9 @@ the sample size, it just gives a more accurate estimate of the true population
 value. If the control sample is large enough (e.g. n $\geq$ 50), then its mean and
 standard deviation will be very good estimates of the population values, and the
 power of our case-control test will be maximal, but not necessarily high (Figure
-\@ref(fig:FIG1)c). Power in case-control comparisons is always limited by the probability that
+\@ref(fig:FIG1)c). *Power in case-control comparisons is always limited by the probability that
 the (unobserved) pre-morbid performance of the patient was no more than the
-deficit/discrepancy size away from the critical cut-off. For instance, if our
+deficit/discrepancy size away from the critical cut-off*. For instance, if our
 patient was pre-morbidly at the top end of the control range of abilities, we
 will inevitably fail to detect all but the most severe of acquired deficits,
 regardless of how many control participants we test.
@@ -49,7 +49,7 @@ calculations may be in helping researchers to estimate how sensitive their
 single-case tests will be to the effects of interest. This might be done with
 respect to prior estimates of expected effect sizes, or it might be done without
 such knowledge. Brief examples of the use of power calculations in both
-scenarios will be given, from the first author’s recent research.
+scenarios will be given, from recent neuropsychological studies.
 
 @hassan_size-weight_2020 re-examined the claim that patient
 DF, a much-studied patient with visual form agnosia following bilateral lesions
@@ -67,7 +67,7 @@ reports was informal, and involved no comparisons with healthy controls, so the
 claim was in need of confirmatory testing.
 
 A first step was taken in a pilot study with patient DF, to estimate her visual
-size-weight illusion [@mcintosh_disrupted_2016]. This pilot study
+size-weight illusion. This pilot study
 suggested that DF had a very large deficit in illusion magnitude, with an effect
 size ($Z_{CC}$) of -3.4 relative to a small group of controls ($n=6$). A formal test of
 this deficit was then mounted, with a much larger age-matched control sample
@@ -92,7 +92,7 @@ Because the two conditions were parallel versions of the same task, it might
 have been legitimate to use the UDT rather than the RSDT to test this
 dissociation (but this would not have found a dissociation either).]
 
-Another, maybe more routine use for power calculations, is in setting realistic
+Another, maybe more routine use for power calculations is in setting realistic
 expectations for the range of abnormalities to which our case-control tests will
 be sensitive. @mitchell_assessment_2020 published a
 protocol for the assessment of visually-guided reaching deficits in patients
@@ -192,7 +192,7 @@ closely to the patient, but can bracket the patient on the covariate of interest
 Our first purpose in this primer has been to present and explain the main facts
 of statistical power for case-control comparisons in neuropsychology. The most
 salient fact is that power is chronically low, as has been noted in prior
-discussions 20[e.g. @crawford_detecting_2006; @crawford_methods_2006; @mcintosh_simple_2018]. The
+discussions [e.g. @crawford_detecting_2006; @crawford_methods_2006; @mcintosh_simple_2018]. The
 limiting factor is the nature of the statistical test itself, which we have
 characterised as a form of outlier detection, but the problem is aggravated by
 the use of small control samples. These tests have been designed to control
@@ -204,20 +204,20 @@ control participants is generally desirable. Some other recommendations for
 optimising power were given in Section \@ref(section10).
 
 Our second purpose has been to provide tools for power calculations when testing
-for deficits and dissociations. Figures \@ref(fig:FIG2) and \@ref(fig:FIG2) and
-Tables \@ref(tab:TD-tab) and \@ref(tab:RSDT-tab) show power across a range of
-likely parameters, and should enable ballpark estimates, adequate for most
-purposes. The `singcar` package for R supports power calculations, and for a
-wider range of tests (Rittmo & McIntosh, 2020). However, the ability to
-calculate power for a given effect size may engender a false sense of precision
-or control. In fact, the estimates of effect size in single-case studies are
-themselves subject to a high degree of uncertainty, with very wide confidence
-(or credible) intervals [e.g. @crawford_point_2010], and power calculations
-based on such estimates will also be imprecise. Moreover, in a typical
-neuropsychological case study, we have little control over the effect sizes we
-encounter, and limited scope to achieve a desired level of power. Nonetheless, a
-priori power calculations can play useful roles in study design and
-interpretation, as illustrated in Section \@ref(section9).
+for deficits and dissociations. Figures \@ref(fig:FIG2) and \@ref(fig:FIG4)b and
+Tables \@ref(tab:TD-tab) and \@ref(tab:RSDT-tab) show power for tests of deficit
+and dissociation across a range of likely parameters, and should enable ballpark
+estimates, adequate for most purposes. The `singcar` package for R supports
+power calculations, and for a wider range of tests.
+However, the ability to calculate power for a given effect size may engender a
+false sense of precision or control. In fact, the estimates of effect size in
+single-case studies are themselves subject to a high degree of uncertainty, with
+very wide confidence (or credible) intervals, and
+power calculations based on such estimates will also be imprecise. Moreover, in
+a typical neuropsychological case study, we have little control over the effect
+sizes we encounter, and limited scope to achieve a desired level of power.
+Nonetheless, a priori power calculations can still play useful roles in study design
+and interpretation, as illustrated in Section \@ref(section9).
 
 Finally, in highlighting the practical realities of power in case-control
 comparisons, we hope to assist researchers in setting realistic expectations for
@@ -226,13 +226,14 @@ broader discussion of the epistemological status of the quantitative
 neuropsychological case study as a method for investigating the organisation of
 mind and brain.
 
+\setlength{\parskip}{-2pt}
 # Open data and tools {-}
 
-The code for our power calculations and simulations is available 
-[here](https://github.com/jorittmo/neuropsychology_power_primer).
-Power calculations for a wider range of single-case tests are supported by the
-singcar package for R, the developmental version of which can be accessed 
-[here](https://github.com/jorittmo/singcar)^[https://github.com/jorittmo/singcar].
+Code used for calculations and simulations is available at
+github\footnote{\label{note1}https://github.com/jorittmo/neuropsychology\_power\_primer}.
+Power calculations for a wider range of single-case tests are supported by the R
+package `singcar`, the developmental version of which is accessed via 
+github\footnote{\label{note2}https://github.com/jorittmo/singcar}.
 
 # References {-}
 

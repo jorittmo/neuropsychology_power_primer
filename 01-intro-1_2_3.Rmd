@@ -42,10 +42,10 @@ calculate power for these tests.^[The first author admits to using these
 statistical tests for many years without having thought seriously about their
 probable power, or its determining factors.] The figures and tables in this
 paper will be broadly sufficient to estimate power when testing for deficits and
-dissociations. We also refer the reader to the singcar package for the R
+dissociations. We also refer the reader to the `singcar` package for the R
 statistical software environment, which implements a wider range of single-case
 tests (including Bayesian extensions of the frequentist tests covered in this
-primer), and associated power calculations (Rittmo & McIntosh, 2020).
+primer), and associated power calculations (see [Appendix]).
 
 
 # Case-control comparisons as a form of outlier detection {#section2}
@@ -269,7 +269,7 @@ These Z-based methods would be appropriate if we were to compare the patient
 against a large enough control sample (e.g. n $\geq$ 50), because a
 normally-distributed sample of this size would closely approximate the standard
 normal (Z) distribution for the whole population. With more restricted control
-samples, however, using the Z distribution would underestimate the likelihood of
+samples, however, using the Z-distribution would underestimate the likelihood of
 extreme scores, and inflate the rate of false positives. To avoid this problem,
 case-control tests based on the t-distribution have been developed, which take
 sample size into account. We will turn to these methods in Section \@ref(section4), but for
@@ -304,10 +304,10 @@ Two examples are depicted in Figure \@ref(fig:FIG1)b, with the cut-off for a def
 1.65 SD below the mean. These data are invented, so we can have full knowledge
 of both the size of the deficit and the pre-morbid ability. Patient A performed
 pre-morbidly at the mean level of controls, but acquired a 2 SD deficit due to
-brain damage so would be shifted to an observed post-morbid Z score of –2; this
+brain damage so would be shifted to an observed post-morbid Z-score of –2; this
 is below the cut-off, so the deficit would be detected. But Patient B, who
 pre-morbidly scored 1 SD above the mean, and sustained exactly the same deficit,
-would be shifted to a score of -1, and the deficit would not be detected. In
+would be shifted to a Z-score of -1, and the deficit would not be detected. In
 general, for a deficit of 2 SD to be detected, a patient’s premorbid performance
 would need to have been within the shaded region in Figure \@ref(fig:FIG1)b. Premorbid
 performances higher than this would not be pushed into the abnormal range by a 2
@@ -317,18 +317,18 @@ The power of a one-tailed test to detect a 2 SD deficit is therefore the same as
 the probability that the patient’s premorbid performance was within the shaded
 portion of the distribution up to .35 standard deviations above the mean (2 SD
 above the cut-off of -1.65). This is given by the area under the standard normal
-curve below .35, which can be obtained from a relevant Z table or calculator:
+curve below .35, which can be obtained from a relevant Z-table or calculator:
 63.7% of observations fall less than .35 SDs above the mean, so our test has .64
 power to detect a deficit of effect size 2 SD. If instead the deficit were 1.65
 SD, the shaded zone would perfectly cover the lower half of the distribution,
-and the power of our test would be exactly .50. Power for a case-comparison test
+and the power of our test would be exactly .50. Power for a case-control test
 of deficit is conceptually simple: *it is the probability that the (unobserved)
 pre-morbid performance of the patient was no more than the deficit size above
 the cut-off for a deficit*.
 
 Figure \@ref(fig:FIG1)c maps the relationship between deficit size and power for a one-tailed
 test of deficit based on the Z-distribution, using a conventional significance
-(alpha) criterion of .05 (equivalent curves for alphas of .1 and .025 are also
+(alpha) criterion of .05 (equivalent curves for alphas of .10 and .025 are also
 shown for comparison). There are two important points to note. The first, which
 is obvious from the figure, is that high power (> .80) is achieved only for very
 large effect sizes, greater than 2.5 SD. The second is that, because this figure

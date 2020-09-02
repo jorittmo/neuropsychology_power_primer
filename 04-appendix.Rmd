@@ -28,12 +28,10 @@ draws from a bivariate normal distribution, imposing the desired ZDCC on the
 n+1th draw and comparing that observation to the n others using the RSDT test
 formula. This was repeated 1 000 000 times, and power was found by dividing the
 number of significant tests by the total number of tests run, for each parameter
-combination of interest. The code for our calculations and simulations is
-available 
-[here](https://github.com/jorittmo/neuropsychology_power_primer)^[https://github.com/jorittmo/neuropsychology_power_primer].
-Power calculations for a wider range of single-case tests
-are supported by the singcar package for R, the developmental version of which can be 
-accessed [here](https://github.com/jorittmo/singcar)^[https://github.com/jorittmo/singcar].
+combination of interest. Code used for calculations and simulations is available at
+github$^4$. Power calculations for a wider range of single-case tests are supported by the R
+package `singcar`, the developmental version of which is accessed via 
+github$^5$.
 
 
 \setcounter{table}{0}

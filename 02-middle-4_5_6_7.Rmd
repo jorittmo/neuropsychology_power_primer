@@ -73,7 +73,7 @@ ana_TD_pwr() %>% select(-Tail) -> m
 
 
 ggplot(m, aes(x=ncon, y=power, group=deficit)) + 
-  geom_line(size=1) +
+  geom_line() +
   labs(x = "Control sample size (n)", y = "Power") +
   scale_x_continuous(limits=c(2, 50), breaks=c(4,8,12,16,20,24,28,32,36,40,44,48)) +
   scale_y_continuous(breaks=c(.1,.2,.3,.4,.5,.6,.7,.8,.9, 1)) +
@@ -92,13 +92,13 @@ ggplot(m, aes(x=ncon, y=power, group=deficit)) +
 ```
 
 
-The t-distribution is more complex than the normal which is reflected in power
-calculations for the TD (see Appendix for details). Not only is power restricted
+The t-distribution is more complex than the standard normal which is reflected in power
+calculations for the TD (see [Appendix] for details). Not only is power restricted
 by the pre-morbid ability of the patient but also by the control sample size.
 However, power for the TD is conceptually similar to that of the Z-score method
-in that *the upper limit* of power is the probability that the (unobserved)
+in that *the upper limit of power is the probability that the (unobserved)
 pre-morbid performance of the patient was no more than the deficit size above
-the cut-off for a deficit. Figure \@ref(fig:FIG2) shows how
+the cut-off for a deficit*. Figure \@ref(fig:FIG2) shows how
 sample size affects the power of the (one-tailed) TD, for a range of (large)
 effect sizes (see Table \@ref(tab:TD-tab) for tabulated values, including two-tailed tests).
 Power rises steeply as the control sample size increases within the very small
@@ -106,7 +106,7 @@ range (< 10), but asymptotes rapidly, with severely diminishing returns above a
 sample size of around 16-24. Beyond this range, power tends towards the maximum
 possible for this test, already mapped in Figure \@ref(fig:FIG1)c. This ceiling level of power
 is inherently low, so the test of deficit is only really applicable to the study
-of effect sizes ($Z_{CC}$ $\geq$ 2) that would be very large in almost any other context.
+of effect sizes that would be very large in almost any other context ($Z_{CC}$ $\geq$ 2).
 High power ($\geq$ .80) is inherently unachievable for effect sizes of 2.5 or less,
 and very high power ($\geq$ .90) can only be expected for extreme deficits ($Z_{CC}$ > 3),
 equivalent to an individual’s performance being decremented by around
@@ -139,7 +139,7 @@ discrepancy ($Z_{DCC}$; see Section \@ref(section6)) rather than the effect size
 ($Z_{CC}$).]  More often, however, the two tasks will be on different scales so the
 scores must be standardised (expressed as Z-scores) before the differences are
 calculated, which is the basis of the Revised Standardised Difference Test
-(RSDT). The RSDT is marginally less powerful than the UDT, but much more widely
+(RSDT). The RSDT is marginally less powerful than the UDT but much more widely
 applicable, so we will focus exclusively on the RSDT here.
 
 The patient may present with an abnormal discrepancy between tasks if brain
@@ -167,7 +167,7 @@ dissociation.
 # The importance of intertask correlation in testing for dissociations {#section6}
 
 A dissociation might involve a deficit of 2 SD on task X with no deficit on task
-Y, and an equivalently-sized dissociation could arise if a deficit of 3 SD on
+Y, and an equivalently-sized dissociation would arise if a deficit of 3 SD on
 task X were accompanied by a milder deficit of 1 SD on task Y. For ease of
 exposition, let us imagine that these two patterns of dissociation have been
 sustained by two patients who both happened to have performed pre-morbidly at
@@ -177,7 +177,7 @@ dissociation between tasks is not captured by the score on task X or Y alone,
 but by the discrepancy between them (Y-X), represented graphically by the
 distance from the clockwise diagonal.
 
-(ref:FIG3-cap) **(a)** Standardised performance on two tasks, X and Y, for 50 healthy control participants (open circles) and two hypothetical patients (black and grey circles). The size of the intertask discrepancy is represented by the distance from the clockwise diagonal. Both patients have an equivalent discrepancy score (Y-X) of 2, but the abnormality of this discrepancy depends on how extreme it is with respect to the distribution of discrepancies in the control group. The three panels illustrate that when the two tasks are more highly correlated in the control sample, the spread of discrepancies in controls is reduced, so the discrepancies in the patients are relatively more extreme. That is, the standardised effect size of the discrepancy ($Z_{DCC}$) is increased, as shown in panel b. **(b)** The relationship between discrepancy score and discrepancy effect size ($Z_{DCC}$), mediated by the strength of the intertask correlation (r) in the control sample. This plot follows the function $Z_{DCC}$ = ($Z_{CC_X} - Z_{CC_Y}) / \sqrt{2-2r}$), where $Z_{CC_X}$ is the standardised deficit on task X and $Z_{CC_Y}$ is the standardised deficit on task Y.
+(ref:FIG3-cap) **(a)** Standardised performance on two tasks, X and Y, for 50 healthy control participants (open circles) and two hypothetical patients (black and grey circles). The size of the intertask discrepancy is represented by the distance from the clockwise diagonal. Both patients have an equivalent discrepancy score (Y-X) of 2, but the abnormality of this discrepancy depends on how extreme it is with respect to the distribution of discrepancies in the control group. The three panels illustrate that when the two tasks are more highly correlated in the control sample, the spread of discrepancies in controls is reduced, so the discrepancies in the patients are relatively more extreme. That is, the standardised effect size of the discrepancy ($Z_{DCC}$) is increased, as shown in panel b. **(b)** The relationship between discrepancy score and discrepancy effect size ($Z_{DCC}$), mediated by the strength of the intertask correlation (r) in the control sample. This plot follows the function $Z_{DCC}$ = ($Z_{CC_Y} - Z_{CC_X}) / \sqrt{2-2r}$), where $Z_{CC_X}$ is the standardised deficit on task X and $Z_{CC_Y}$ is the standardised deficit on task Y.
 
 
 ```{r FIG3, echo = FALSE, fig.cap="(ref:FIG3-cap)", fig.width=6, fig.height=7, out.width='100%',  warning = FALSE}
@@ -222,7 +222,7 @@ for(d in 1:4){
 
 
 ggplot(df, aes(x=r, y=Zdcc, group=d))+
-  geom_line(size=1)+
+  geom_line()+
   labs(y = expression(paste("Discrepancy effect size (", Z[DCC], ")"))) +
   scale_y_continuous(limits=c(0,10), breaks=c(0,1,2,3,4,6,8))+
   scale_x_continuous(name="Intertask correlation (r)", limits=c(0,1.2), breaks=c(0,.1,.2,.3,.4,.5,.6,.7,.8,.9))+
@@ -281,10 +281,10 @@ potential for more highly powered tests of dissociation.
 A case-control test of dissociation (RSDT and its relatives) is a matter of
 estimating the proportion of the healthy population who would produce an
 intertask discrepancy more extreme than that of the single-case. The conceptual
-basis of power for this test is similar to that for the TD: the upper
+basis of power for this test is similar to that for the TD: *the upper
 limit of power is the probability that the patient’s (unobserved) pre-morbid
 discrepancy between tasks was no more than the acquired discrepancy size away
-from the cut-off for a dissociation. It is less tractable to estimate power
+from the cut-off for a dissociation*. It is less tractable to estimate power
 analytically for the RSDT than for the TD, because its test statistic is only an
 approximation to the t-distribution [@crawford_testing_2005;
 @garthwaite_distribution_2004], so a simulation approach has been used to
@@ -295,7 +295,7 @@ commitment to the direction of a dissociation in a given patient [e.g.
 @crawford_testing_2005; @crawford_wanted_2003]. However, in practice, we often
 do have a strong prediction based on a patient’s prior behaviour and/or pattern
 of brain damage [@mcintosh_simple_2018]. If so, then one-tailed tests of
-dissociation should be considered, for the higher power they provide (see
+dissociation should be considered, for the higher power they offer (see
 Section \@ref(section10)).
 
 (ref:FIG4-cap)  **(a)** Power of the Revised Standardised Difference Test [RSDT: @crawford_testing_2005] to detect different intertask discrepancies, mediated by the strength of the intertask correlation (r) in the control sample, assuming a two-tailed significance criterion of .05, and a very large control sample ($n=100$). **(b)** Power of the RSDT to detect different effect sizes of discrepancy ($\text{Z}_{\text{DCC}}$) in a single case, with control sample sizes ranging from 4-50, assuming a one-tailed significance criterion of .05. Tabulated values for the one and two-tailed RSDT are shown in Table \@ref(tab:RSDT-tab).
@@ -311,7 +311,7 @@ load("data/RSDT_plot_cor_1M.Rdata")
 df <- pwr_RSDT_cor
 
 ggplot(df, aes(x = rab, y = power, group = factor(xa_ast) ) ) +
-  geom_line(size = 1) +
+  geom_line() +
   labs(y = "Power", x = "Intertask correlation (r)", title = "(a)") +
   scale_x_continuous(limits=c(-0.21, 0.9), breaks=c(0,.1,.2,.3,.4,.5,.6,.7,.8,.9))+
   scale_y_continuous(breaks=c(.1,.2,.3,.4,.5,.6,.7,.8,.9, 1)) +
@@ -329,7 +329,7 @@ load("data/RSDT_plot.Rdata")
 
 pwr_RSDT_plot %>% filter(tail != "less" & !is.na(power)) -> m
 
-ggplot(m) + geom_line(aes(x=ncon, y=power, group=xa_ast), size=1) +
+ggplot(m) + geom_line(aes(x=ncon, y=power, group=xa_ast)) +
   labs(x = "Control sample size (n)", y = "Power") +
   scale_x_continuous(limits=c(2, 50), breaks=c(4,8,12,16,20,24,28,32,36,40,44,48)) +
   scale_y_continuous(breaks=c(.1,.2,.3,.4,.5,.6,.7,.8,.9, 1)) +
@@ -352,18 +352,18 @@ FIG4a + FIG4b
 ```
 
 
-Figure \@ref(fig:FIG4)b confirms that the power of the (two-tailed) RSDT to detect different
+Figure \@ref(fig:FIG4)a confirms that the power of the (two-tailed) RSDT to detect different
 levels of intertask discrepancy in a single case is modulated dramatically by
 the intertask correlation in healthy participants. This is just an expression of
-the dynamic plotted in Figure \@ref(fig:FIG4)b: for any given discrepancy, the RSDT gains
-power with intertask correlation (Figure \@ref(fig:FIG4)b) because the standardised effect
-size of the discrepancy ($Z_{DCC}$) increases (Figure \@ref(fig:FIG4)a). A more general way to
+the dynamic already shown in Figure \@ref(fig:FIG3)b: for any given discrepancy, the RSDT gains
+power with intertask correlation (Figure \@ref(fig:FIG4)a) because the standardised effect
+size of the discrepancy ($Z_{DCC}$) increases (Figure \@ref(fig:FIG3)b). A more general way to
 investigate the power of the RSDT is thus in terms of its relationship with
 $Z_{DCC}$, which takes intertask correlation into account. Figure \@ref(fig:FIG4)b shows how sample
 size affects the power of the (two-tailed) RSDT, for a range of (large)
 discrepancy effect sizes (see Table \@ref(tab:RSDT-tab) for tabulated values, including
 one-tailed tests). These functions are qualitatively similar to those for a test
 of deficit (Figure \@ref(fig:FIG2)), with high power achievable only for very large effect
-sizes, and control sample size providing little extra power after the first
+sizes, and control sample size providing little additional benefit after the first
 16-24 participants.
 
