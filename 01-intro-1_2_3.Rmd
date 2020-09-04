@@ -278,7 +278,7 @@ which to illustrate the origins and limits of power in case-control comparisons.
 
 
 
-# The origins and limits of power in a case-control comparisons {#section3}
+# The origins and limits of power in case-control comparisons {#section3}
 
 The power of any hypothesis-testing procedure is the probability that it will
 correctly reject the null hypothesis when the null hypothesis is false or, more

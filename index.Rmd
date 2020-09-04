@@ -56,7 +56,7 @@ header-includes: |
   \usepackage{graphicx}
   \usepackage{afterpage}
   \usepackage[margin=4.5cm]{geometry}
-  \usepackage{cleveref}
+  \usepackage[hang,flushmargin]{footmisc}
   \makeatletter
   \let\@afterindenttrue\@afterindentfalse
   \makeatother

@@ -24,7 +24,7 @@ between-task discrepancy ($Z_{DCC}$) rather than the effect size of a deficit ($
 Table \@ref(tab:RSDT-tab) shows estimated power for the Revised Standardised Difference Test
 [RSDT: @crawford_testing_2005], for a range of likely parameters. Power for
 the RSDT was estimated using Monte Carlo simulation, by generating n+1 random
-draws from a bivariate normal distribution, imposing the desired ZDCC on the
+draws from a bivariate normal distribution, imposing the desired $Z_{CC}$ on the
 n+1th draw and comparing that observation to the n others using the RSDT test
 formula. This was repeated 1 000 000 times, and power was found by dividing the
 number of significant tests by the total number of tests run, for each parameter
@@ -125,13 +125,13 @@ kable(ana_TD_arr, align = "r", digits = 2, booktabs = T,
 ```
 
 
-(ref:RSDT-tab-text1) *Note:* $\text{Z}_{\text{DCC}} = \frac{z_x^* -z_y^*}{\sqrt{2-2r}}$, i.e. the standardised case score for the intertask \linebreak discrepancy of
-(ref:RSDT-tab-text2) interest where $z_x^*$ and $z_y^*$ are the standardised case scores for the tasks of interest. Higher
-(ref:RSDT-tab-text3) power for small samples and small effect sizes is due to loss of control of Type I errors
-(ref:RSDT-tab-text4) (Crawford & Garthwaite, 2005). Power calculated with 1 000 000 Monte Carlo simulations.
+(ref:RSDT-tab-text1) *Note:* $Z_{DCC} = (Z_{CC_Y} - Z_{CC_X}) / \sqrt{2-2r}$, i.e. the standardised case score for the intertask \linebreak discrepancy of
+(ref:RSDT-tab-text2) interest where $z_x^*$ and $z_y^*$ are the standardised case scores for the tasks of interest. Higher power for small
+(ref:RSDT-tab-text3) samples and small effect sizes is due to loss of control of Type I errors [@crawford_testing_2005].
+(ref:RSDT-tab-text4) Power calculated with 1 000 000 Monte Carlo simulations.
 (ref:alph) $\alpha$
 
-(ref:RSDT-tab-cap) Power for the Revised Standardised Difference Test (Crawford & Garthwaite, 2005). 
+(ref:RSDT-tab-cap) Power for the Revised Standardised Difference Test [@crawford_testing_2005]. 
  
 
 ```{r RSDT-tab, echo=FALSE, message=FALSE}
